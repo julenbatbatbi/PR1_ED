@@ -35,10 +35,6 @@ public class Attendee extends ElementWithId {
         return surname;
     }
 
-    public Iterator numEvents(){
-
-        return (Iterator) this.attendedEvents;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -60,7 +56,7 @@ public class Attendee extends ElementWithId {
         return this.attendedEvents;
     }
 
-    public int numEventsAttended(){
+    public int numEvents(){
        return this.attendedEvents.size();
     }
 }

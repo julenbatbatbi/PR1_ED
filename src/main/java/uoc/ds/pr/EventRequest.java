@@ -12,12 +12,16 @@ public class EventRequest {
     private int max;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String entityId;
 
     private boolean allowRegister;
 
+    private UniversityEvents.Status status = UniversityEvents.Status.PENDING;
 
-   public EventRequest(String id, String eventId, String description, UniversityEvents.InstallationType installationType, byte resources, int max, LocalDate startDate, LocalDate endDate, boolean allowRegister){
+
+   public EventRequest(String id, String eventId, String entityId, String description, UniversityEvents.InstallationType installationType, byte resources, int max, LocalDate startDate, LocalDate endDate, boolean allowRegister){
         this.allowRegister = allowRegister;
+        this.entityId = entityId;
         this.eventId = eventId;
         this.description = description;
         this.id = id;
@@ -35,9 +39,6 @@ public class EventRequest {
         return allowRegister;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
     public byte getResources() {
         return resources;
@@ -63,7 +64,23 @@ public class EventRequest {
         return eventId;
     }
 
+    public String getEntityId(){
+       return this.entityId;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public String getDescription(){
+       return this.description;
+    }
+
+    public void setStatus(UniversityEvents.Status newStatus){
+       this.status = status;
+    }
+
+    public void setStartDate(LocalDate newDate){
+       this.startDate = newDate;
     }
 }

@@ -5,15 +5,25 @@ import uoc.ds.pr.UniversityEvents;
 public class Rating {
 
     private final Attendee attendee;
-    private final Event event;
+
     private UniversityEvents.Rating rating;
-    public Rating(Attendee attendee, Event event, UniversityEvents.Rating grade){
+    private  String message;
+
+    public Rating(Attendee attendee,  UniversityEvents.Rating grade, String message){
             this.attendee = attendee;
-            this.event = event;
             this.rating = grade;
+            this.message = message;
     }
 
-    public Attendee getAttendee(){
-        return null;
+    public Attendee getAttendee() {
+        return attendee;
+    }
+
+    public UniversityEvents.Rating getRating() {
+        return rating;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

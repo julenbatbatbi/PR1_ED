@@ -12,9 +12,8 @@ public abstract class AbstractIdArryImpl<T extends ElementWithId> {
 
 
     public T getElement(String id){
-        for(int i = 0; i < array.length; i++){
-            if(array[i] == null) return null;
-            else if(array[i].getId().equals(id)) return array[i];
+        for(int i = 0; i < current_elements; i++){
+             if(array[i].getId().equals(id)) return array[i];
         }
 
         return null;

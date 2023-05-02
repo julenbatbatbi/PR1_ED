@@ -296,7 +296,6 @@ public class UniversityEventsPR1Test {
     public void getAllEventsTest() throws DSException {
         Assert.assertThrows(NoEventsException.class, () ->
                 this.universityEvents.getAllEvents());
-
         updateEventRequestTest();
 
         Iterator<Event> it = this.universityEvents.getAllEvents();

@@ -8,7 +8,6 @@ public class Entity extends ElementWithId {
     protected String name;
     protected String description;
 
-
     protected UniversityEvents.EntityType type;
 
 

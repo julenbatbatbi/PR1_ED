@@ -1,55 +1,50 @@
 package uoc.ds.pr.util;
 
-import static uoc.ds.pr.UniversityEvents.FLAG_ALL_OPTS;
-import static uoc.ds.pr.UniversityEvents.FLAG_VIDEO_PROJECTOR;
+import uoc.ds.pr.UniversityEvents;
+
+import static uoc.ds.pr.UniversityEvents.*;
 
 public class ResourceUtil {
 
 
-    public static byte getFlag(byte flagComputer, byte flagAuxiliaryMic, byte flagTouchScreen) {
-        return (byte) 0x0;
-    }
-
-
-    public static byte getFlag(byte flagAllOpts) {
-        return (byte) 0x0;
-    }
-
-    public static byte getFlag(byte flagTouchScreen, byte flagComputer) {
-        return (byte) 0x0;
-    }
-
-    public static byte getFlag(byte flagAuxiliaryMic, byte flagVideoProjector, byte flagComputer, byte flagTouchScreen) {
-        return (byte) 0x0;
-    }
-
-    public static byte getFlag(byte ...flags){
-        for(byte flag: flags){
-            return 0x00;
+    public static byte getFlag(byte ...resources){
+        byte flag = 0x0;
+        for(byte resource: resources){
+            flag = (byte) (flag | resource);
         }
 
-        return 0x0;
+        return flag;
     }
 
     public static  boolean hasComputer(byte resource){
-        return true;
+        boolean res = (byte) (resource & FLAG_COMPUTER) == FLAG_COMPUTER;
+
+        return res;
     }
 
     public static boolean hasAuxiliaryMic(byte resource){
-            return false;
+            boolean res = (byte) (resource & FLAG_AUXILIARY_MIC) ==  FLAG_AUXILIARY_MIC;
+
+            return res;
     }
 
     public static boolean hasTouchScreen(byte resource) {
-        return true;
+        boolean res = (byte) (resource & FLAG_TOUCH_SCREEN) ==  FLAG_TOUCH_SCREEN;
+
+        return res;
     }
 
     public static boolean hasVideoProjector(byte resource){
-        return false;
+        boolean res = (byte) (resource & FLAG_VIDEO_PROJECTOR) == FLAG_VIDEO_PROJECTOR ;
+
+        return res;
     }
 
 
     public static boolean hasAllOpts(byte resource) {
-        return false;
+        boolean res = (byte) (resource & FLAG_ALL_OPTS) == FLAG_ALL_OPTS;
+
+        return res;
     }
 }
 

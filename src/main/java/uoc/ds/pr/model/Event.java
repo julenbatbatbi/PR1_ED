@@ -10,45 +10,46 @@ import java.time.LocalDate;
 
 public class Event extends ElementWithId {
     protected LinkedList<Rating> ratings = new LinkedList<>();
+
+    protected float rating = 0;
     protected QueueArrayImpl<Attendee> queuAttendees = new QueueArrayImpl<>();
-
-
-    private final AttendeeList attendees;
+    protected String entityId;
     private final int maxAttendees;
     private  UniversityEvents.InstallationType installationType;
-
     private byte resources;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isAllowToRegister;
+    private String description;
+
+    private String eventId;
 
 
-
-    public Event(String id, int max, UniversityEvents.InstallationType installationType, byte resources, LocalDate startDate, LocalDate endDate, boolean isAllowToRegister){
-        this.id = id;
+    public Event(String eventId, String entityId, String description, UniversityEvents.InstallationType installationType, byte resources, int max, LocalDate startDate, LocalDate endDate, boolean allowRegister){
+        this.eventId = eventId;
+        this.entityId = entityId;
+        this.description = description;
         this.maxAttendees = max;
-        this.attendees = new AttendeeList(max);
         this.installationType = installationType;
         this.resources = resources;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.isAllowToRegister = isAllowToRegister;
-
-
+        this.isAllowToRegister = allowRegister;
     }
+
     @Override
     public String getId(){
-        return this.id;
+        return this.eventId;
     }
 
     public String getEventId(){
-        return this.getId(); }
+        return this.eventId; }
     public boolean isAllowToRegister(){
         return isAllowToRegister;
     }
 
-    public Integer rating(){
-        return null;
+    public float rating(){
+        return this.rating;
     }
 
     public Attendee getAttendee(String attendeeId) {
@@ -70,7 +71,12 @@ public class Event extends ElementWithId {
     }
 
     public int numAttendees(){
-        return this.queuAttendees.size() > maxAttendees ? maxAttendees: this.queuAttendees.size();
+        int size = this.queuAttendees.size();
+        return size > maxAttendees ? maxAttendees: size;
+    }
+
+    public String getEntityId(){
+        return this.entityId;
     }
 
     public int getSubstitutesAmnt(){
@@ -78,7 +84,19 @@ public class Event extends ElementWithId {
         int subs = (queuSize - this.maxAttendees ) <= 0 ? 0 : (queuSize - this.maxAttendees);
 
         return subs;
-
-
     }
+
+
+    public void addRating(Rating newRating){
+        this.ratings.insertEnd(newRating);
+        if(this.ratings.size() > 1) this.rating = (this.rating + newRating.getRating().getValue()) / 2 ;
+        else this.rating = newRating.getRating().getValue();
+    }
+
+
+    public int numRatings(){
+        return this.ratings.size();
+    }
+
+
 }

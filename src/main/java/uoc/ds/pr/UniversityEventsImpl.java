@@ -2,13 +2,11 @@ package uoc.ds.pr;
 
 import edu.uoc.ds.exceptions.EmptyContainerException;
 import edu.uoc.ds.traversal.Iterator;
-import edu.uoc.ds.traversal.IteratorArrayImpl;
 import uoc.ds.pr.exceptions.*;
 import uoc.ds.pr.model.*;
 import edu.uoc.ds.adt.sequential.*;
-import uoc.ds.pr.util.OrderedVector;
 import java.time.LocalDate;
-import java.util.Objects;
+
 
 
 public class UniversityEventsImpl implements UniversityEvents {
@@ -16,35 +14,12 @@ public class UniversityEventsImpl implements UniversityEvents {
     protected int TOTAL_EVENT_REQUESTS = 0;
     protected Attendee MOST_ACTIVE_ATTENDEE;
 
-
-
-
-
-
     protected AttendeeList attendees = new AttendeeList(MAX_NUM_ATTENDEES);
     protected EntityList entities = new EntityList(MAX_NUM_ENTITIES);
     protected EventsList events = new EventsList(MAX_NUM_EVENTS);
 
     protected QueueArrayImpl<EventRequest> requests = new QueueArrayImpl<>(MAX_NUM_REQUESTS);
     protected LinkedList<EventRequest> rejectedRequests = new LinkedList<>();
-
-    //probablemente moverlo a la clase Event
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -78,7 +53,7 @@ public class UniversityEventsImpl implements UniversityEvents {
     @Override
     public void addEventRequest(String id, String eventId, String entityId, String description, InstallationType installationType, byte resources, int max, LocalDate startDate, LocalDate endDate, boolean allowRegister) throws EntityNotFoundException {
         if(this.getEntity(entityId) == null) throw new EntityNotFoundException();
-        this.requests.add(new EventRequest(id, eventId, description, installationType, resources, max, startDate, endDate, allowRegister));
+        this.requests.add(new EventRequest(id, eventId, entityId,description, installationType, resources,  max, startDate, endDate, allowRegister));
         this.TOTAL_EVENT_REQUESTS ++;
     }
 
@@ -87,6 +62,8 @@ public class UniversityEventsImpl implements UniversityEvents {
         EventRequest evaluated = null;
         try {
             evaluated = this.requests.poll();
+            evaluated.setStatus(status);
+            evaluated.setStartDate(date);
 
             switch(status){
                 case ENABLED:
@@ -105,10 +82,7 @@ public class UniversityEventsImpl implements UniversityEvents {
         }catch(Exception e){
             if(e instanceof EmptyContainerException) throw new NoEventRequestException();
         }
-
         return evaluated;
-
-
     }
 
     @Override
@@ -124,6 +98,15 @@ public class UniversityEventsImpl implements UniversityEvents {
 
         _attendee.signUp(_event);
         _event.signUp(_attendee);
+        updateMostActiveAttendee(_attendee);
+    }
+
+    protected void updateMostActiveAttendee(Attendee attendee){
+       if(MOST_ACTIVE_ATTENDEE == null) this.MOST_ACTIVE_ATTENDEE = attendee;
+       else {
+           if(MOST_ACTIVE_ATTENDEE.numEvents() < attendee.numEvents())
+               MOST_ACTIVE_ATTENDEE = attendee;
+       }
     }
 
     @Override
@@ -140,8 +123,9 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public Iterator<Event> getEventsByEntity(String entityId) throws NoEventsException {
-        Entity _entity = this.getEntity(entityId);
-        _entity.get
+            Iterator<Event> it =  this.events.getEventsByEntity(entityId);
+            if(!it.hasNext()) throw new NoEventsException();
+            else return it;
     }
 
     @Override
@@ -161,10 +145,14 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public void addRating(String attendeeId, String eventId, Rating rating, String message) throws AttendeeNotFoundException, EventNotFoundException, AttendeeNotInEventException {
-        if(this.getAttendee(attendeeId) == null) throw new AttendeeNotFoundException();
-        if(this.getEvent(eventId) == null) throw new EventNotFoundException();
-        if(this.getEvent(eventId).getAttendee(attendeeId) == null) throw new AttendeeNotInEventException();
+        Attendee _attendee = this.getAttendee(attendeeId);
+        Event _event = this.getEvent(eventId);
+        if(_attendee == null) throw new AttendeeNotFoundException();
+        if(_event== null) throw new EventNotFoundException();
+        if(_event.getAttendee(attendeeId) == null) throw new AttendeeNotInEventException();
 
+        uoc.ds.pr.model.Rating _rating = new uoc.ds.pr.model.Rating(_attendee,  rating, message);
+        _event.addRating(_rating);
     }
 
     @Override
@@ -180,7 +168,8 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public Attendee mostActiveAttendee() throws AttendeeNotFoundException {
-        return null;
+        if(MOST_ACTIVE_ATTENDEE == null) throw new AttendeeNotFoundException();
+        else return MOST_ACTIVE_ATTENDEE;
     }
 
     @Override
@@ -228,7 +217,7 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public int numEventsByEntity(String entityId) {
-        return 0;
+        return this.events.numEventsByEntity(entityId);
     }
 
     @Override
@@ -238,16 +227,18 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public int numRatingsByEvent(String eventId) {
-        return 0;
+        return this.getEvent(eventId).numRatings();
     }
 
 
     public void addEvent(EventRequest eventToAdd){
         this.events.addElement( new Event(
                 eventToAdd.getEventId(),
-                eventToAdd.getMax(),
+                eventToAdd.getEntityId(),
+                eventToAdd.getDescription(),
                 eventToAdd.getInstallationType(),
                 eventToAdd.getResources(),
+                eventToAdd.getMax(),
                 eventToAdd.getStartDate(),
                 eventToAdd.getEndDate(),
                 eventToAdd.isAllowRegister()
