@@ -93,7 +93,7 @@ DS - PR1
         He intentado que los métodos dentro de esta clase, sean lo más simples posibles, fáciles de entender
         y bastante expresivos. No sé si lo he con conseguido, pero yo al menos lo he intentado.
 
-##### updateEvent
+##### updateEvent y Entity
         
         Doy mención especial a esta función, a parte de (me ha dicho un pajarito) las union types son una muy mala práctica
         Para poder castear una clase a su subclase, primero debió ser instanciada como esta subclase.
@@ -103,12 +103,59 @@ DS - PR1
 
 ### Clases Abstractas AbstractIdArryImpl y ElementWithId
 
+        Esta clase abstracta ha sido usada para implementar
+        Event[], Entity[] y Attendee[]. Pues todas tenían algún método y propiedad en común
+            Event[] --> EventList
+            Entity[] --> EntityList
+            Attendee[] --> AttendeeList
         No me gustó tener que definir varios métodos practicamente idénticos. Por eso diseñé una clase abstracta
         que albergase los métodos de update, find ... y no sé si alguno más
 
         Como utilicé un tipo genérico T,  no podía llamar a una función que no estuviese definida.
         Como todas las instancias de esta clase compartian Id, extendí el tipo genérico para poder utilizar
         El método getId()
+
+        Hay cosas que no he controlado.
+        Por ejemplo, los Attendee en cola, la cantidad se calcula. Sin embargo no hay ninguna estructura de datos
+        Para representar realmente qué Attendee está en cola. Además todos los Attendee que se apuntan al evento
+        A pesar de estar en la cola, cuentan como apuntados.
+        La cola, tampoco tiene un tamaño fijado, a pesar de que en el ENUM de la clase UniversityEventsImpl hay uno que parece
+        específico para ese propósito.
+
+#### getEventsByEntity
+     Sobre este método, lo que hice, fue filtrar entre todos los eventos, cuales contuviesen la EntityId
+     Lo más óptimo hubiese sido guardar una linkedList de eventos en cada Entity.
+
+    En este caso, he intercambiado menor acoplamiento por una mayor complejidad y una responsabilidad que 
+    La clase Event no debería tener. Debería cambiarlo, pero no he tocado nada.
+
+
+
+## Principios de programación y buenas prácticas
+
+    Por motivo de tiempo sobretodo, no he cuidado una convención estricta a mi forma de programar
+
+    Diría que he roto principios, al menos SOLID, específicamente, me viene a la cabeza el método updateEvent
+    Que deberá ser extendido cada vez que se añadiese una nueva entidad al sistema.
+
+    No soy programador de Java y tampoco trabajo con OOP, a pesar de que se me convalide esta asignatura,
+    por ello, estoy seguro de que hay métodos mucho más optimos para realizar algunas operaciones, pero que yo desconozco.
+    Un ejemplo de ello.
+
+# Conclusiones
+
+    Dicho todo esto, quiero decir que a pesar de decir que he andado falto de tiempo n veces. Me he esforzado
+    por intentar hacerlo lo mejor posible.
+
+    Espero que este trabajo valga al menos para aprobar.
+    Como asignatura, me ha parecido una de las más divertidas e interesantes (y encima hasta se programa !)
+    
+    Espero poder coger con más tiempo la siguiente PR y hacer un mejor trabajo.
+
+# FIN
+    Gracias por leerme, me hubiese gustado extenderme más, pero ya se me pasa la hora de entrega.
+    
+    [Julen San Alejo](https://github.com/julenbatbatbi)
 
     
 
