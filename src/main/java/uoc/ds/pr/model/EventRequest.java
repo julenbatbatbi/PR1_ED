@@ -1,4 +1,6 @@
-package uoc.ds.pr;
+package uoc.ds.pr.model;
+
+import uoc.ds.pr.UniversityEvents;
 
 import java.time.LocalDate;
 

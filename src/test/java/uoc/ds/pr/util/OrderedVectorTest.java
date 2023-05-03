@@ -12,7 +12,6 @@ public class OrderedVectorTest {
     private static final int LEN = 10;
     OrderedVector<Integer> v;
     Comparator<Integer> CMP = (arg0, arg1) -> arg0.compareTo(arg1);
-
     @Before
     public void setUp() {
         v = new OrderedVector<Integer>(LEN, CMP);

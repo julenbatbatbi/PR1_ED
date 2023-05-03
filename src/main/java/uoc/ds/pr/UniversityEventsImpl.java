@@ -5,8 +5,10 @@ import edu.uoc.ds.traversal.Iterator;
 import uoc.ds.pr.exceptions.*;
 import uoc.ds.pr.model.*;
 import edu.uoc.ds.adt.sequential.*;
-import java.time.LocalDate;
+import uoc.ds.pr.util.OrderedVector;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 
 
 public class UniversityEventsImpl implements UniversityEvents {
@@ -21,7 +23,8 @@ public class UniversityEventsImpl implements UniversityEvents {
     protected QueueArrayImpl<EventRequest> requests = new QueueArrayImpl<>(MAX_NUM_REQUESTS);
     protected LinkedList<EventRequest> rejectedRequests = new LinkedList<>();
 
-
+    protected Comparator<Event> CMP = (Event arg1, Event arg2) -> arg1.rating().compareTo(arg2.rating());
+    protected OrderedVector<Event> OrderedRanking = new OrderedVector<>(MAX_NUM_EVENTS, CMP);
 
 
     @Override
@@ -174,7 +177,7 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public Event bestEvent() throws EventNotFoundException {
-        return null;
+        throw new EventNotFoundException();
     }
 
     @Override

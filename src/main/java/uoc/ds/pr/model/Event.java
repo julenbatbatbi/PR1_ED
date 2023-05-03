@@ -48,7 +48,7 @@ public class Event extends ElementWithId {
         return isAllowToRegister;
     }
 
-    public float rating(){
+    public Float rating(){
         return this.rating;
     }
 

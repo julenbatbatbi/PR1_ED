@@ -7,10 +7,10 @@ import uoc.ds.pr.util.ElementWithId;
 import java.time.LocalDate;
 
 public class Attendee extends ElementWithId {
-    private String name;
-    private String surname;
+    private final String name;
+    private final String surname;
 
-    private LocalDate birthdate;
+    private final LocalDate birthdate;
 
     protected LinkedList<Event> attendedEvents = new LinkedList<>();
 
@@ -36,17 +36,6 @@ public class Attendee extends ElementWithId {
     }
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
 
     public void signUp(Event event){
         this.attendedEvents.insertEnd(event);

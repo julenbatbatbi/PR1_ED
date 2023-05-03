@@ -5,6 +5,7 @@ import uoc.ds.pr.exceptions.*;
 import uoc.ds.pr.model.Attendee;
 import uoc.ds.pr.model.Entity;
 import uoc.ds.pr.model.Event;
+import uoc.ds.pr.model.EventRequest;
 
 import java.time.LocalDate;
 
