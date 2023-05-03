@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public class Event extends ElementWithId {
     protected LinkedList<Rating> ratings = new LinkedList<>();
 
-    protected float rating = 0;
+    protected double meanRating = 0;
+    protected double totalRating = 0;
     protected QueueArrayImpl<Attendee> queuAttendees = new QueueArrayImpl<>();
     protected String entityId;
     private final int maxAttendees;
@@ -48,8 +49,8 @@ public class Event extends ElementWithId {
         return isAllowToRegister;
     }
 
-    public Float rating(){
-        return this.rating;
+    public Double rating(){
+        return this.meanRating;
     }
 
     public Attendee getAttendee(String attendeeId) {
@@ -89,8 +90,11 @@ public class Event extends ElementWithId {
 
     public void addRating(Rating newRating){
         this.ratings.insertEnd(newRating);
-        if(this.ratings.size() > 1) this.rating = (this.rating + newRating.getRating().getValue()) / 2 ;
-        else this.rating = newRating.getRating().getValue();
+        this.totalRating +=  newRating.getRating().getValue();
+        int ratingAmount = this.ratings.size();
+
+        this.meanRating = totalRating / ratingAmount;
+
     }
 
 

@@ -30,7 +30,7 @@ public class OrderedVector<E> {
     }
 
 
-    public void sort(){
+    protected void sort(){
       E[] _newValues = (E[])  Arrays.stream(vector, 0, currentSize).sorted(comparator).toArray(Object[]::new);
       for(int i = 0; i < _newValues.length; i++){
           this.vector[(currentSize -1) - i] = _newValues[i];
@@ -45,6 +45,7 @@ public class OrderedVector<E> {
     }
 
     public Iterator<E> values(){
+        sort();
         return new IteratorArrayImpl<>(this.vector, currentSize, 0);
     }
 

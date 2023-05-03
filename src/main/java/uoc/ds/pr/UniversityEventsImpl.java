@@ -23,8 +23,8 @@ public class UniversityEventsImpl implements UniversityEvents {
     protected QueueArrayImpl<EventRequest> requests = new QueueArrayImpl<>(MAX_NUM_REQUESTS);
     protected LinkedList<EventRequest> rejectedRequests = new LinkedList<>();
 
-    protected Comparator<Event> CMP = (Event arg1, Event arg2) -> arg1.rating().compareTo(arg2.rating());
-    protected OrderedVector<Event> OrderedRanking = new OrderedVector<>(MAX_NUM_EVENTS, CMP);
+    protected Comparator<Event> _CMP = (Event arg1, Event arg2) -> arg1.rating().compareTo(arg2.rating());
+    protected OrderedVector<Event> orderedRanking = new OrderedVector<>(MAX_NUM_EVENTS, _CMP);
 
 
     @Override
@@ -177,7 +177,9 @@ public class UniversityEventsImpl implements UniversityEvents {
 
     @Override
     public Event bestEvent() throws EventNotFoundException {
-        throw new EventNotFoundException();
+        Iterator<Event> it = orderedRanking.values();
+        if(!it.hasNext()) throw new EventNotFoundException();
+        else return  it.next();
     }
 
     @Override
@@ -235,7 +237,7 @@ public class UniversityEventsImpl implements UniversityEvents {
 
 
     public void addEvent(EventRequest eventToAdd){
-        this.events.addElement( new Event(
+        Event _event = new Event(
                 eventToAdd.getEventId(),
                 eventToAdd.getEntityId(),
                 eventToAdd.getDescription(),
@@ -245,7 +247,9 @@ public class UniversityEventsImpl implements UniversityEvents {
                 eventToAdd.getStartDate(),
                 eventToAdd.getEndDate(),
                 eventToAdd.isAllowRegister()
-        ));
+        );
+        this.orderedRanking.update(_event);
+        this.events.addElement(_event);
     }
 
     @Override
