@@ -78,9 +78,20 @@ public class OrderedVector<E> {
 
 
     protected int findIndex(E e){
-        for(int i = 0; i < currentSize; i++){
+      /*  for(int i = 0; i < currentSize; i++){
            if( comparator.compare(this.vector[i], e ) == 0) return i;
+        } */
+        int left = 0, right = currentSize;
+
+        while(left <= right){
+
+            int m = Math.round(left + ((right - left) / 2));
+
+            if( comparator.compare(this.vector[m], e ) == 0) return m;
+            if( comparator.compare(this.vector[m], e ) == 1) left = m +1;
+            else if( comparator.compare(this.vector[m], e ) == -1) right = m -1;
         }
+
         return -1;
     }
 
